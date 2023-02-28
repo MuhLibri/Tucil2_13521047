@@ -6,7 +6,7 @@ Untuk menjalankan program ini, cukup menyediakan environment yang biasa digunaka
 
 # Cara Menggunakan
 Pengguna dapat mengubah file pada folder ``src`` menjadi file ``.exe`` atau langsung menjalankan main.exe pada folder ``bin``. Jika pengguna ingin mengubah file pada folder ``src`` menjadi file ``.exe`` terlebih dahulu, maka dapat dilakukan dengan
-1. Membuka terminal pada folder src. 
+1. Membuka terminal pada folder ``src``. 
 2. ketik ``g++ main.cpp Utility.cpp BruteForce.cpp DivideConquer.cpp -o main`` pada terminal.
 
 Setelah main.exe ada, pengguna dapat menjalankan program dengan mengetik ``./main`` pada terminal. Pada awal program, pengguna akan diminta untuk menginput banyak titik, banyak dimensi, dan batas ujung.
