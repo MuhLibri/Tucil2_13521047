@@ -9,6 +9,8 @@ Pengguna dapat mengubah file pada folder ``src`` menjadi file ``.exe`` atau lang
 1. Membuka terminal pada folder src. 
 2. ketik ``g++ main.cpp Utility.cpp BruteForce.cpp DivideConquer.cpp -o main`` pada terminal.
 
-Setelah main.exe ada, pengguna dapat menjalankan program dengan mengetik ``./main`` pada terminal. Pada awal program, pengguna akan diminta untuk menginput manual atau dirandom dari program. Untuk memilih input manual, pengguna cukup mengetikkan ``1`` dan ketik ``2`` untuk memilih random. Setelah program mendapatkan input, hasil solusi akan ditampilkan dan pengguna akan diminta untuk memilih menyimpan solusi atau tidak. Pengguna cukup mengetikkan ``1`` jika ingin menyimpan solusi dan ``2`` jika tidak. Jika ingin menyimpan solusi, maka pengguna selanjutnya akan dimintai nama file. Lalu, pada bagian akhir pengguna akan memilih untuk keluar program atau tidak. Ketik ``1`` jika ingin keluar program dan ``2`` jika masih ingin menggunakan program.
+Setelah main.exe ada, pengguna dapat menjalankan program dengan mengetik ``./main`` pada terminal. Pada awal program, pengguna akan diminta untuk menginput banyak titik, banyak dimensi, dan batas ujung.
+
+P.S. Disarankan untuk compile manual dan run program dengan environment linux karena waktu eksekusi pada windows tidak seakurat pada linux
 
 # Made by Muhammad Equilibrie Fajria - 13521047
