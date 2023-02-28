@@ -1,5 +1,4 @@
 #include "DivideConquer.hpp"
-#include <iostream>
 using namespace std;
 
 
@@ -51,13 +50,13 @@ std::tuple<double, int, int> DivideConquer::dncShortestEuclidean (vector<double>
     std::tuple<double, int, int> retVal, strip;
 
     // Basis
-    if (end-start<=2) {
+    if ((end-start) <= 2) {
         double temp_euclidean = calculateEuclidean(list[start], list[start+1]);
         this->euclideanCount++;
         double shortest_euclidean = temp_euclidean;
         retVal = {temp_euclidean, start, start+1};
         
-        if (end - start > 1) {
+        if ((end-start) > 1) {
             for (int i = start; i <= end; i++) {
                 for (int j = i + 1; j <= end; j++) {
                     temp_euclidean = calculateEuclidean(list[i], list[j]);
@@ -101,8 +100,8 @@ std::tuple<double, int, int> DivideConquer::dncShortestEuclidean (vector<double>
                 out_of_strip_right = true;
             }
         }
-        strip = stripShortestEuclidean(list, leftIndex+1, rightIndex-1, d);
-        if (get<0>(strip) < get<0>(retVal)) {
+        strip = stripShortestEuclidean (list, leftIndex+1, rightIndex-1, d);
+        if (get<0>(strip) < d) {
             retVal = strip;
         } 
         return retVal;

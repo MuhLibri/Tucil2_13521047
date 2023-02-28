@@ -46,9 +46,8 @@ int partitionList (vector<double>* list, int start, int end, int plane) {
  
     int pivotIndex = start + count;
     swap(list[pivotIndex], list[start]);
- 
+
     int i = start, j = end;
- 
     while (i < pivotIndex && j > pivotIndex) {
         while (list[i].at(plane) <= pivot.at(plane)) {
             i++;

@@ -1,5 +1,4 @@
 #include "BruteForce.hpp"
-#include "iostream"
 using namespace std;
 
 BruteForce::BruteForce() : euclideanCount(0), shortestDistance(9999) {}
