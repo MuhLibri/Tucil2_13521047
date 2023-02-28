@@ -15,15 +15,20 @@ int main() {
 
     cout << "Masukkan banyak titik" << endl;
     cin >> n;
-    cout << "Masukkan banyak dimensi" << endl;
-    cin >> dimensi;
-    cout << "Masukkan batas ujung (batas ujung diasumsikan simetri)" << endl;
-    cin >> maxNum;
-
     while (n < 2) {
         cout << "Masukan salah, silahkan masukkan kembali" << endl;
         cin >> n;
     }
+
+    cout << "Masukkan banyak dimensi" << endl;
+    cin >> dimensi;
+    while (dimensi < 2) {
+        cout << "Masukan salah, silahkan masukkan kembali" << endl;
+        cin >> dimensi;
+    }
+
+    cout << "Masukkan batas ujung (batas ujung diasumsikan simetrik)" << endl;
+    cin >> maxNum;
     cout << endl;
 
     listVector = new vector<double>[n];
