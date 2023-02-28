@@ -6,49 +6,15 @@ using namespace std;
 DivideConquer::DivideConquer() : euclideanCount(0), shortestDistance(9999) {}
 
 DivideConquer::DivideConquer(std::vector<double>* listVector, int size) {
-    double middlePoint;
-    std::vector<double>* stripList;
-    int leftIndex = size/2;
-    int rightIndex = (size/2) + 1;
-    bool out_of_strip_left = false;
-    bool out_of_strip_right = false;
     this->euclideanCount = 0;
+    std::tuple<double, int, int> retVal;
     sortList(listVector, size, 0);
 
     if (size > 2) {
-        auto smallest1 = DivideConquer::dncShortestEuclidean(listVector, 0, leftIndex);
-        auto smallest2 = DivideConquer::dncShortestEuclidean(listVector, rightIndex, size-1);
-        middlePoint = (listVector[leftIndex].at(0) + listVector[rightIndex].at(0))/2.0;
-
-        if (get<0>(smallest1) <= get<0>(smallest2)) {
-            this->shortestDistance = get<0>(smallest1);
-            this->p1 = listVector[get<1>(smallest1)];
-            this->p2 = listVector[get<2>(smallest1)];
-        }
-        else {
-            this->shortestDistance = get<0>(smallest2);
-            this->p1 = listVector[get<1>(smallest2)];
-            this->p2 = listVector[get<2>(smallest2)];        
-        }
-
-        while ((leftIndex > 0) && (!out_of_strip_left)) {
-            if (listVector[leftIndex].at(0) > (middlePoint - this->shortestDistance)) {
-                leftIndex--;
-            }
-            else {
-                out_of_strip_left = true;
-            }
-        }
-
-        while ((rightIndex < size-1) && (!out_of_strip_right)) {
-            if (listVector[rightIndex].at(0) < (middlePoint + this->shortestDistance)) {
-                rightIndex++;
-            }
-            else {
-                out_of_strip_right = true;
-            }
-        }
-        stripShortestEuclidean(listVector, leftIndex, rightIndex);
+        retVal = dncShortestEuclidean(listVector, 0, size-1);
+        this->shortestDistance = get<0>(retVal);
+        this->p1 = listVector[get<1>(retVal)];
+        this->p2 = listVector[get<2>(retVal)];
     }
     else {
         this->shortestDistance = calculateEuclidean(listVector[0], listVector[1]);
@@ -77,47 +43,92 @@ std::vector<double> DivideConquer::getPoint2() {
 }
 
 std::tuple<double, int, int> DivideConquer::dncShortestEuclidean (vector<double>* list, int start, int end) {
-    double current_euclidean = 0;
-    double next_euclidean = 0;
+    double middlePoint, d;
+    int leftIndex = (start+end)/2;
+    int rightIndex = ((start+end)/2) + 1;
+    bool out_of_strip_left = false;
+    bool out_of_strip_right = false;
+    std::tuple<double, int, int> retVal, strip;
 
     // Basis
-    if (start == end) {
-        return {100000, start, end};
-    }
-    else if (start+1 == end) {
+    if (end-start<=2) {
+        double temp_euclidean = calculateEuclidean(list[start], list[start+1]);
         this->euclideanCount++;
-        return {calculateEuclidean(list[start], list[start+1]), start, start+1};
+        double shortest_euclidean = temp_euclidean;
+        retVal = {temp_euclidean, start, start+1};
+        
+        if (end - start > 1) {
+            for (int i = start; i <= end; i++) {
+                for (int j = i + 1; j <= end; j++) {
+                    temp_euclidean = calculateEuclidean(list[i], list[j]);
+                    this->euclideanCount++;
+                    if (temp_euclidean < shortest_euclidean) {
+                        retVal = {temp_euclidean, i, j};
+                    }
+                }
+            }
+        }        
+        return retVal;
     }
     // Rekurens
     else {
-        current_euclidean = calculateEuclidean(list[start], list[start+1]);
-        this->euclideanCount++;
+        auto leftPart = dncShortestEuclidean (list, start, leftIndex);
+        auto rightPart = dncShortestEuclidean (list, rightIndex, end);
 
-        auto next_enum = dncShortestEuclidean (list, start+1, end);
-        next_euclidean = get<0>(next_enum);
-        if (current_euclidean <= next_euclidean) {
-            return {current_euclidean, start, start+1};
+        if (get<0>(leftPart) <= get<0>(rightPart)) {
+            retVal = leftPart;
         }
         else {
-            return next_enum;
-        }   
+            retVal = rightPart;
+        }
+
+        d = get<0>(retVal);
+        middlePoint = (list[leftIndex].at(0) + list[rightIndex].at(0))/2.0;
+        while ((leftIndex > start) && (!out_of_strip_left)) {
+            if (list[leftIndex].at(0) > (middlePoint - d)) {
+                leftIndex--;
+            }
+            else {
+                out_of_strip_left = true;
+            }
+        }
+
+        while ((rightIndex < end) && (!out_of_strip_right)) {
+            if (list[rightIndex].at(0) < (middlePoint + d)) {
+                rightIndex++;
+            }
+            else {
+                out_of_strip_right = true;
+            }
+        }
+        strip = stripShortestEuclidean(list, leftIndex+1, rightIndex-1, d);
+        if (get<0>(strip) < get<0>(retVal)) {
+            retVal = strip;
+        } 
+        return retVal;
     }
 }
 
-void DivideConquer::stripShortestEuclidean(vector<double>* listVector, int leftIndex, int rightIndex) {
-    double temp_euclidean;
-
-    for (int i = leftIndex+1; i < rightIndex; i++) {
-        for (int j = i + 1; j < rightIndex; j++) {
-            temp_euclidean = calculateEuclidean(listVector[i], listVector[j]);
-            this->euclideanCount++;
-            if (temp_euclidean < this->shortestDistance) {
-                this->shortestDistance = temp_euclidean;
-                this->p1 = listVector[i];
-                this->p2 = listVector[j];
+std::tuple<double, int, int> DivideConquer::stripShortestEuclidean(vector<double>* listVector, int start, int end, double d) {
+    double temp_euclidean = calculateEuclidean(listVector[start], listVector[start+1]);
+    this->euclideanCount++;
+    double shortest_euclidean = d;
+    std::tuple<double, int, int> retVal = {temp_euclidean, start, start+1};
+    
+    if (end - start > 1) {
+        for (int i = start; i <= end; i++) {
+            for (int j = i + 1; j <= end; j++) {
+                temp_euclidean = calculateEuclidean(listVector[i], listVector[j]);
+                this->euclideanCount++;
+                if (temp_euclidean < shortest_euclidean) {
+                    shortest_euclidean = temp_euclidean;
+                    retVal = {temp_euclidean, i, j};
+                }
             }
         }
     }
+
+    return retVal;
 }
 
 void DivideConquer::print() {

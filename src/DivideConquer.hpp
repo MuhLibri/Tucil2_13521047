@@ -28,7 +28,7 @@ public:
     std::tuple<double, int, int> dncShortestEuclidean (vector<double>* list, int start, int end);
     // Mengembailikan euclidean terpendek dari list
 
-    void stripShortestEuclidean (vector<double>* listVector, int start, int end);
+    std::tuple<double, int, int> stripShortestEuclidean (vector<double>* listVector, int start, int end, double d);
     // Mencari euclidean terpendek dari stripList
 
     void print();
